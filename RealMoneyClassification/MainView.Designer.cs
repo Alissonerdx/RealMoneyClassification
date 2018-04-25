@@ -60,7 +60,7 @@ namespace ReconhecimentoCedulas_2._0
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -85,7 +85,7 @@ namespace ReconhecimentoCedulas_2._0
             // 
             this.sVMEvaluateEvalPasteToolStripMenuItem.Name = "sVMEvaluateEvalPasteToolStripMenuItem";
             this.sVMEvaluateEvalPasteToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.sVMEvaluateEvalPasteToolStripMenuItem.Text = "SVM Evaluate (Eval Paste)";
+            this.sVMEvaluateEvalPasteToolStripMenuItem.Text = "SVM Evaluate (Eval Folder)";
             this.sVMEvaluateEvalPasteToolStripMenuItem.Click += new System.EventHandler(this.sVMEvaluateEvalPasteToolStripMenuItem_Click);
             // 
             // sVMEvaluateOneImageToolStripMenuItem
@@ -103,7 +103,7 @@ namespace ReconhecimentoCedulas_2._0
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainView";
-            this.Text = "Reconhecimento de Cédulas";
+            this.Text = "RealMoneyClassification";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
