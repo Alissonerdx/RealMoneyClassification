@@ -110,8 +110,8 @@ namespace ReconhecimentoCedulas_2._0.Models.Recognition
         {
             CvInvoke.BilateralFilter(image.Clone(), image, _configurations.BILATERAL_FILTER_DISTANCE, _configurations.BILATERAL_FILTER_SIGMA_COLOR, _configurations.BILATERAL_FILTER_SIGMA_SPACE);
 
-            //var viewer = new ImageViewer(image, "Bilateral Filter Applied");
-            //viewer.Show();
+            var viewer = new ImageViewer(image, "Bilateral Filter Applied");
+            viewer.Show();
 
             image = HistogramEqualization(image, true);
 
@@ -119,8 +119,8 @@ namespace ReconhecimentoCedulas_2._0.Models.Recognition
 
             CvInvoke.BilateralFilter(image.Clone(), image, _configurations.BILATERAL_FILTER_DISTANCE, _configurations.BILATERAL_FILTER_SIGMA_COLOR, _configurations.BILATERAL_FILTER_SIGMA_SPACE);
 
-            //viewer = new ImageViewer(image, "Adjusted Contrast and Illumination");
-            //viewer.Show();
+            viewer = new ImageViewer(image, "Adjusted Contrast and Illumination");
+            viewer.Show();
 
             return image;
         }

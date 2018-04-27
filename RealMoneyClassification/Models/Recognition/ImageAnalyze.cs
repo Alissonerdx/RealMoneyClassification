@@ -10,7 +10,6 @@ namespace ReconhecimentoCedulas_2._0.Models.Recognition
     public class ImageAnalyze
     {
         private Recognition _recognition;
-        private Mat _imageOriginal;
         private Mat _imagePreProcessed;
         private Mat _imageProcessed;
 

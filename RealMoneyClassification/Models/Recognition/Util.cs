@@ -94,7 +94,7 @@ namespace ReconhecimentoCedulas_2._0.Models.Recognition
             //    inliersMaskOut = 0;
             //}
 
-            CvInvoke.FindHomography(srcPoints, dstPoints, Emgu.CV.CvEnum.HomographyMethod.Ransac, reprojectionThreshold, inliersMaskOut);
+            CvInvoke.FindHomography(srcPoints, dstPoints, homographyOut, Emgu.CV.CvEnum.HomographyMethod.Ransac, reprojectionThreshold, inliersMaskOut);
 
             for (int i = 0; i < inliersMaskOut.Size; ++i)
             {

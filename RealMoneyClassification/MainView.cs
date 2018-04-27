@@ -1,4 +1,5 @@
 ﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using ReconhecimentoCedulas_2._0.Models;
@@ -68,7 +69,10 @@ namespace ReconhecimentoCedulas_2._0
                     var image = new Image<Bgr, Byte>(_pathImageMain);
                     _svmBof.RunEvaluateOneImage(image);
                 }
-                MessageBox.Show("Select One Image for Evaluate");
+                else
+                {
+                    MessageBox.Show("Select One Image for Evaluate");
+                }
             }
             catch (Exception exception)
             {
@@ -101,7 +105,7 @@ namespace ReconhecimentoCedulas_2._0
                 Stopwatch watch = new Stopwatch();
 
                 _imageAnalyze = new ImageAnalyze(_recognition);
-                var imageResult = new Mat(_pathImageMain);
+                var imageResult = new Mat(_pathImageMain, LoadImageType.Color);
 
                 watch.Start();
 
@@ -111,7 +115,10 @@ namespace ReconhecimentoCedulas_2._0
 
                 MessageBox.Show($"Time Evaluate: {watch.Elapsed}");
             }
-            MessageBox.Show("Select One Image for Evaluate");
+            else
+            {
+                MessageBox.Show("Select One Image for Evaluate");
+            }
         }
     }
 }

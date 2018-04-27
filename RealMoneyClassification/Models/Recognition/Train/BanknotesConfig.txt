@@ -1,0 +1,12 @@
+2_back.jpg			|   2 | 0 255 255
+2_front.jpg			|   2 | 0 255 255
+5_back.jpg			|   5 | 0 255 255
+5_front.jpg			|   5 | 0 255 255
+10_back.jpg			|  10 | 0 255 255
+10_front.jpg		|  10 | 0 255 255
+20_back.jpg			|  20 | 0 255 255
+20_front.jpg		|  20 | 0 255 255
+50_back.jpg			|  50 | 0 255 255
+50_front.jpg		|  50 | 0 255 255
+100_back.jpg		| 100 | 0 255 255
+100_front.jpg		| 100 | 0 255 255

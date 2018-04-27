@@ -43,6 +43,8 @@ namespace ReconhecimentoCedulas_2._0.Models.Recognition
         {
             _trainsImage.Push(imageTrain);
 
+            _keypointsImageTrain.Add(new VectorOfKeyPoint());
+            _descriptorsImageTrain.Push(new Mat());
 
             _LODIndex = _trainsImage.Size - 1;
 
