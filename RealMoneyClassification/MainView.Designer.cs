@@ -35,6 +35,8 @@ namespace ReconhecimentoCedulas_2._0
             this.sVMTrainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sVMEvaluateEvalPasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sVMEvaluateOneImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,7 +71,8 @@ namespace ReconhecimentoCedulas_2._0
             this.operationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sVMTrainToolStripMenuItem,
             this.sVMEvaluateEvalPasteToolStripMenuItem,
-            this.sVMEvaluateOneImageToolStripMenuItem});
+            this.sVMEvaluateOneImageToolStripMenuItem,
+            this.sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem});
             this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
             this.operationsToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
             this.operationsToolStripMenuItem.Text = "Operations";
@@ -77,23 +80,38 @@ namespace ReconhecimentoCedulas_2._0
             // sVMTrainToolStripMenuItem
             // 
             this.sVMTrainToolStripMenuItem.Name = "sVMTrainToolStripMenuItem";
-            this.sVMTrainToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.sVMTrainToolStripMenuItem.Text = "SVM Train";
+            this.sVMTrainToolStripMenuItem.Size = new System.Drawing.Size(347, 22);
+            this.sVMTrainToolStripMenuItem.Text = "(SIFT + BOF + SVM) Train";
             this.sVMTrainToolStripMenuItem.Click += new System.EventHandler(this.sVMTrainToolStripMenuItem_Click);
             // 
             // sVMEvaluateEvalPasteToolStripMenuItem
             // 
             this.sVMEvaluateEvalPasteToolStripMenuItem.Name = "sVMEvaluateEvalPasteToolStripMenuItem";
-            this.sVMEvaluateEvalPasteToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.sVMEvaluateEvalPasteToolStripMenuItem.Text = "SVM Evaluate (Eval Folder)";
+            this.sVMEvaluateEvalPasteToolStripMenuItem.Size = new System.Drawing.Size(347, 22);
+            this.sVMEvaluateEvalPasteToolStripMenuItem.Text = "(SIFT + BOF + SVM) Evaluate (Eval Folder)";
             this.sVMEvaluateEvalPasteToolStripMenuItem.Click += new System.EventHandler(this.sVMEvaluateEvalPasteToolStripMenuItem_Click);
             // 
             // sVMEvaluateOneImageToolStripMenuItem
             // 
             this.sVMEvaluateOneImageToolStripMenuItem.Name = "sVMEvaluateOneImageToolStripMenuItem";
-            this.sVMEvaluateOneImageToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.sVMEvaluateOneImageToolStripMenuItem.Text = "SVM Evaluate (One Image)";
+            this.sVMEvaluateOneImageToolStripMenuItem.Size = new System.Drawing.Size(347, 22);
+            this.sVMEvaluateOneImageToolStripMenuItem.Text = "(SIFT + BOF + SVM) Evaluate (One Image)";
             this.sVMEvaluateOneImageToolStripMenuItem.Click += new System.EventHandler(this.sVMEvaluateOneImageToolStripMenuItem_Click);
+            // 
+            // sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem
+            // 
+            this.sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.runToolStripMenuItem});
+            this.sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem.Name = "sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem";
+            this.sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem.Size = new System.Drawing.Size(347, 22);
+            this.sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem.Text = "SIFT (Seletive Feature Matching and Shape Analysis)";
+            // 
+            // runToolStripMenuItem
+            // 
+            this.runToolStripMenuItem.Name = "runToolStripMenuItem";
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.runToolStripMenuItem.Text = "Run";
+            this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
             // 
             // MainView
             // 
@@ -120,6 +138,8 @@ namespace ReconhecimentoCedulas_2._0
         private System.Windows.Forms.ToolStripMenuItem sVMTrainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sVMEvaluateEvalPasteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sVMEvaluateOneImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sIFTSeletiveFeatureMatchingAndShapeAnalysisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
     }
 }
 

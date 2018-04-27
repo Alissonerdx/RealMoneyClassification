@@ -2,10 +2,12 @@
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using ReconhecimentoCedulas_2._0.Models;
+using ReconhecimentoCedulas_2._0.Models.Recognition;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,16 +18,19 @@ namespace ReconhecimentoCedulas_2._0
 {
     public partial class MainView : Form
     {
-        private string pathImageMain;
-        private Bitmap imageMain;
-        private SvmBof SvmBof;
+        private string _pathImageMain;
+        private Bitmap _imageMain;
+        private SvmBof _svmBof;
+        private Recognition _recognition;
+        private ImageAnalyze _imageAnalyze;
 
         public MainView()
         {
             InitializeComponent();
-            pathImageMain = String.Empty;
-            imageMain = null;
-            SvmBof = new SvmBof();
+            _pathImageMain = String.Empty;
+            _imageMain = null;
+            _svmBof = new SvmBof();
+            _recognition = new Recognition();
         }
         
 
@@ -34,9 +39,9 @@ namespace ReconhecimentoCedulas_2._0
             OpenFileDialog ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                pathImageMain = ofd.FileName;
-                imageMain = new Bitmap(pathImageMain);
-                var image = new Image<Bgr, Byte>(imageMain);
+                _pathImageMain = ofd.FileName;
+                _imageMain = new Bitmap(_pathImageMain);
+                var image = new Image<Bgr, Byte>(_imageMain);
                 ImageViewer imv = new ImageViewer(image, "Image Main");
                 imv.Show();
             }
@@ -46,7 +51,7 @@ namespace ReconhecimentoCedulas_2._0
         {
             try
             {
-                SvmBof.RunTrain();
+                _svmBof.RunTrain();
             }
             catch(Exception exception)
             {
@@ -58,8 +63,12 @@ namespace ReconhecimentoCedulas_2._0
         {
             try
             {
-                var image = new Image<Bgr, Byte>(pathImageMain);
-                SvmBof.RunEvaluateOneImage(image);
+                if (_imageMain != null)
+                {
+                    var image = new Image<Bgr, Byte>(_pathImageMain);
+                    _svmBof.RunEvaluateOneImage(image);
+                }
+                MessageBox.Show("Select One Image for Evaluate");
             }
             catch (Exception exception)
             {
@@ -71,12 +80,38 @@ namespace ReconhecimentoCedulas_2._0
         {
             try
             {
-                SvmBof.RunEvaluateManyImages();
+                _svmBof.RunEvaluateManyImages();
             }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message);
             }
+        }
+
+        /// <summary>
+        /// Recognition (LoadBanknotesTrain) => ImageAnalyze (PreProcess) => Recognition (DetectBanknotesResults)
+        /// </summary>
+        private void runToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(_pathImageMain != null)
+            {
+                _recognition = new Recognition();
+                _recognition.LoadImagesTrain();
+
+                Stopwatch watch = new Stopwatch();
+
+                _imageAnalyze = new ImageAnalyze(_recognition);
+                var imageResult = new Mat(_pathImageMain);
+
+                watch.Start();
+
+                _imageAnalyze.RunEvaluateImage(imageResult);
+
+                watch.Stop();
+
+                MessageBox.Show($"Time Evaluate: {watch.Elapsed}");
+            }
+            MessageBox.Show("Select One Image for Evaluate");
         }
     }
 }

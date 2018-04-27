@@ -63,8 +63,13 @@
     <Compile Include="MainView.Designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Recognition\Configurations.cs" />
     <Compile Include="Models\Recognition\DetectBanknote.cs" />
+    <Compile Include="Models\Recognition\ImageAnalyze.cs" />
+    <Compile Include="Models\Recognition\ImageCustom.cs" />
+    <Compile Include="Models\Recognition\InterfaceUtil.cs" />
     <Compile Include="Models\Recognition\Recognition.cs" />
+    <Compile Include="Models\Recognition\Result.cs" />
     <Compile Include="Models\Recognition\Util.cs" />
     <Compile Include="Models\SvmBof.cs" />
     <Compile Include="Program.cs" />
@@ -121,6 +126,30 @@
     <Content Include="Eval\50 %283%29.jpg" />
     <Content Include="Eval\50 %284%29.jpg" />
     <Content Include="License-LGPL.txt" />
+    <Content Include="Models\Recognition\Train\100_back.jpg" />
+    <Content Include="Models\Recognition\Train\100_back_mask.jpg" />
+    <Content Include="Models\Recognition\Train\100_front.jpg" />
+    <Content Include="Models\Recognition\Train\100_front_mask.jpg" />
+    <Content Include="Models\Recognition\Train\10_back.jpg" />
+    <Content Include="Models\Recognition\Train\10_back_mask.jpg" />
+    <Content Include="Models\Recognition\Train\10_front.jpg" />
+    <Content Include="Models\Recognition\Train\10_front_mask.jpg" />
+    <Content Include="Models\Recognition\Train\20_back.jpg" />
+    <Content Include="Models\Recognition\Train\20_back_mask.jpg" />
+    <Content Include="Models\Recognition\Train\20_front.jpg" />
+    <Content Include="Models\Recognition\Train\20_front_mask.jpg" />
+    <Content Include="Models\Recognition\Train\2_back.jpg" />
+    <Content Include="Models\Recognition\Train\2_back_mask.jpg" />
+    <Content Include="Models\Recognition\Train\2_front.jpg" />
+    <Content Include="Models\Recognition\Train\2_front_mask.jpg" />
+    <Content Include="Models\Recognition\Train\50_back.jpg" />
+    <Content Include="Models\Recognition\Train\50_back_mask.jpg" />
+    <Content Include="Models\Recognition\Train\50_front.jpg" />
+    <Content Include="Models\Recognition\Train\50_front_mask.jpg" />
+    <Content Include="Models\Recognition\Train\5_back.jpg" />
+    <Content Include="Models\Recognition\Train\5_back_mask.jpg" />
+    <Content Include="Models\Recognition\Train\5_front.jpg" />
+    <Content Include="Models\Recognition\Train\5_front_mask.jpg" />
     <Content Include="Train\10 %281%29.jpg" />
     <Content Include="Train\10 %2810%29.jpg" />
     <Content Include="Train\10 %2811%29.jpg" />

@@ -1,4 +1,5 @@
 ﻿using Emgu.CV;
+using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.XFeatures2D;
@@ -13,105 +14,174 @@ namespace ReconhecimentoCedulas_2._0.Models.Recognition
 {
     public class DetectBanknote
     {
-        private VectorOfMat _targetsImage;
-        private List<VectorOfKeyPoint> _keypointsImageTarget;
-        private VectorOfMat _descriptorsImageTarget;
-        private List<List<int>> _indexKeypointsImageTargetAssociatedROI;
-        private List<List<int>> _numberKeypointsImageTargetInContour;
-        private Util _util;
-        public int ValueBanknote { get; set; }
-        public MCvScalar ColorContour { get; set; }
-        public bool GlobalMatch { get; set; }
-
+        private VectorOfMat _descriptorsImageTrain;
+        private List<List<int>> _indexKeypointsImageTrainAssociatedROI;
+        private List<VectorOfKeyPoint> _keypointsImageTrain;
         private int _LODIndex;
-
+        private VectorOfMat _trainsImage;
+        private List<List<int>> _numberKeypointsImageTrainInContour;
+        private Util _util;
         public DetectBanknote(int valueBanknote, MCvScalar colorContour, bool globalMatch)
         {
             this.ValueBanknote = valueBanknote;
             this.ColorContour = colorContour;
             this.GlobalMatch = globalMatch;
             _LODIndex = 0;
-            _keypointsImageTarget = new List<VectorOfKeyPoint>();
-            _descriptorsImageTarget = new VectorOfMat();
-            _indexKeypointsImageTargetAssociatedROI = new List<List<int>>();
-            _numberKeypointsImageTargetInContour = new List<List<int>>();
-            _targetsImage = new VectorOfMat();
+            _keypointsImageTrain = new List<VectorOfKeyPoint>();
+            _descriptorsImageTrain = new VectorOfMat();
+            _indexKeypointsImageTrainAssociatedROI = new List<List<int>>();
+            _numberKeypointsImageTrainInContour = new List<List<int>>();
+            _trainsImage = new VectorOfMat();
             _util = new Util();
         }
 
-        public VectorOfKeyPoint GetKeypointsTarget()
+        public MCvScalar ColorContour { get; set; }
+        public bool GlobalMatch { get; set; }
+        public int ValueBanknote { get; set; }
+
+        public bool ConfigRecognitionImageTrain(Mat imageTrain, Mat roiTrain, bool useGlobalMatch)
         {
-            return _keypointsImageTarget[_LODIndex];
-        }
-
-        public bool ConfigRecognitionImageTarget(Mat imageTarget, Mat roiTarget, bool useGlobalMatch)
-        {
-            _targetsImage.Push(imageTarget);
+            _trainsImage.Push(imageTrain);
 
 
-            _LODIndex = _targetsImage.Size - 1;
+            _LODIndex = _trainsImage.Size - 1;
 
             SIFT sift = new SIFT();
 
             //Insere os pontos chaves da imagem alvo na lista de pontos chaves
-            _keypointsImageTarget.Insert(_LODIndex, new VectorOfKeyPoint(sift.Detect(_targetsImage[_LODIndex], roiTarget)));
-            if (_keypointsImageTarget[_LODIndex] != null && _keypointsImageTarget[_LODIndex].Size < 4)
+            _keypointsImageTrain.Insert(_LODIndex, new VectorOfKeyPoint(sift.Detect(_trainsImage[_LODIndex], roiTrain)));
+            if (_keypointsImageTrain[_LODIndex] != null && _keypointsImageTrain[_LODIndex].Size < 4)
                 return false;
 
             //Calcula os descritores dos pontos chaves extraidos, no caso se extrair poucos descritores ele return false = não reconhecido
-            sift.Compute(_targetsImage[_LODIndex], _keypointsImageTarget[_LODIndex], _descriptorsImageTarget[_LODIndex]);
-            if (_descriptorsImageTarget[_LODIndex].Rows < 4)
+            sift.Compute(_trainsImage[_LODIndex], _keypointsImageTrain[_LODIndex], _descriptorsImageTrain[_LODIndex]);
+            if (_descriptorsImageTrain[_LODIndex].Rows < 4)
                 return false;
 
             if (useGlobalMatch)
                 return true;
             else
-                return ConfigureImageTargetROI(_keypointsImageTarget[_LODIndex], roiTarget);
+                return ConfigureImageTrainROI(_keypointsImageTrain[_LODIndex], roiTrain);
 
         }
 
-
-        public bool ConfigureImageTargetROI(VectorOfKeyPoint keypointsImageTarget, Mat roiTarget)
+        public bool ConfigureImageTrainROI(VectorOfKeyPoint keypointsImageTrain, Mat roiTrain)
         {
-            if (keypointsImageTarget == null)
+            if (keypointsImageTrain == null)
                 return false;
 
-            VectorOfVectorOfPoint contoursImageTargetROI = new VectorOfVectorOfPoint();
+            VectorOfVectorOfPoint contoursImageTrainROI = new VectorOfVectorOfPoint();
             VectorOfPointF hierarchyContours = new VectorOfPointF();
 
             //Extrai contornos da imagem definida como ROI (Mascara) e a hierarquia destes contornos
-            CvInvoke.FindContours(roiTarget.Clone(), contoursImageTargetROI, hierarchyContours, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
+            CvInvoke.FindContours(roiTrain.Clone(), contoursImageTrainROI, hierarchyContours, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
 
-            if (contoursImageTargetROI.Size == 0)
+            if (contoursImageTrainROI.Size == 0)
                 return false;
 
-            int numberKeypointsImageTarget = keypointsImageTarget.Size;
+            int numberKeypointsImageTrain = keypointsImageTrain.Size;
 
             var pop = new ParallelOptions { MaxDegreeOfParallelism = 5 };
 
-            for (int indexKeypointImageTarget = 0; indexKeypointImageTarget < numberKeypointsImageTarget; ++indexKeypointImageTarget)
+            for (int indexKeypointImageTrain = 0; indexKeypointImageTrain < numberKeypointsImageTrain; ++indexKeypointImageTrain)
             {
-                Parallel.For(0, contoursImageTargetROI.Size, pop, i =>
+                Parallel.For(0, contoursImageTrainROI.Size, pop, i =>
                 {
-                    PointF pointXY = keypointsImageTarget[indexKeypointImageTarget].Point;
-                    if (CvInvoke.PointPolygonTest(contoursImageTargetROI, pointXY, false) >= 0)
+                    PointF pointXY = keypointsImageTrain[indexKeypointImageTrain].Point;
+                    if (CvInvoke.PointPolygonTest(contoursImageTrainROI, pointXY, false) >= 0)
                     {
-                        _indexKeypointsImageTargetAssociatedROI[_LODIndex][indexKeypointImageTarget] = i;
+                        _indexKeypointsImageTrainAssociatedROI[_LODIndex][indexKeypointImageTrain] = i;
                         return;
                     }
                 });
             }
 
-            _numberKeypointsImageTargetInContour[_LODIndex].Clear();
-            _numberKeypointsImageTargetInContour[_LODIndex] = new List<int>(contoursImageTargetROI.Size);
+            _numberKeypointsImageTrainInContour[_LODIndex].Clear();
+            _numberKeypointsImageTrainInContour[_LODIndex] = new List<int>(contoursImageTrainROI.Size);
 
-            for (int i = 0; i < _indexKeypointsImageTargetAssociatedROI[_LODIndex].Count; ++i)
+            for (int i = 0; i < _indexKeypointsImageTrainAssociatedROI[_LODIndex].Count; ++i)
             {
-                var indexContour = _indexKeypointsImageTargetAssociatedROI[_LODIndex][i];
-                ++_numberKeypointsImageTargetInContour[_LODIndex][indexContour];
+                var indexContour = _indexKeypointsImageTrainAssociatedROI[_LODIndex][i];
+                ++_numberKeypointsImageTrainInContour[_LODIndex][indexContour];
             }
 
             return true;
+        }
+
+        public VectorOfKeyPoint GetKeypointsTrain()
+        {
+            return _keypointsImageTrain[_LODIndex];
+        }
+
+        public void UpdateCurrentLODIndex(ref Mat imageToAnalyze, float trainResolutionSelectionSplitOffset)
+        {
+            int halfImageResolution = imageToAnalyze.Cols / 2;
+
+            int newLODINdex = 0;
+            for (int i = 1; i < _trainsImage.Size; ++i)
+            {
+                int previousLODWidthResolution = _trainsImage[i - 1].Cols;
+                int currentLODWidthResolution = _trainsImage[i].Cols;
+
+                if (halfImageResolution > currentLODWidthResolution)
+                {
+                    newLODINdex = i; //use bigger resolution
+                }
+                else if (halfImageResolution < previousLODWidthResolution)
+                {
+                    newLODINdex = i - 1; //use lower resolution
+                    break;
+                }
+                else
+                {
+                    int splittingPointResolution = (int)((currentLODWidthResolution - previousLODWidthResolution) * trainResolutionSelectionSplitOffset);
+                    int imageOffsetResolution = currentLODWidthResolution - halfImageResolution;
+
+                    if (imageOffsetResolution < splittingPointResolution)
+                    {
+                        newLODINdex = i - 1; //use lower resolution
+                        break;
+                    }
+                    else
+                    {
+                        newLODINdex = i;
+                        break;
+                    }
+                }
+            }
+            _LODIndex = newLODINdex;
+        }
+
+        public Result AnalyzeImageEval(ref VectorOfKeyPoint keypointsEvalImage, ref Mat descriptorsEvalImage, float maxDistanceRatio,
+           float reprojectionThreshold, double confidence, int maxIters, int minimumNumbersInliers)
+        {
+            var matches = new VectorOfDMatch();
+            //Emgu.CV.Flann.KdTreeIndexParamses flannIndexParams = new Emgu.CV.Flann.KdTreeIndexParamses(4);
+            //var flannIndex = new Index(descriptorsQueryImage, flannIndexParams);
+            //DescriptorMatcher matcher = flannIndex;
+            BFMatcher bfmatcher = new BFMatcher(DistanceType.L2);
+
+            _util.MatchDescriptorsWithRatioTest(bfmatcher, ref descriptorsEvalImage, _descriptorsImageTrain[_LODIndex], ref matches, maxDistanceRatio);
+
+            if (matches.Size < minimumNumbersInliers)
+            {
+                return new Result();
+            }
+
+            Mat homography = new Mat();
+            VectorOfDMatch inliers = new VectorOfDMatch();
+            VectorOfInt inliersMaskOut = new VectorOfInt();
+            _util.RefineMatchesWithHomography(keypointsEvalImage, _keypointsImageTrain[_LODIndex], matches, ref homography, inliers, inliersMaskOut, reprojectionThreshold, minimumNumbersInliers);
+
+            if (inliers.Size < minimumNumbersInliers)
+            {
+                return new Result();
+            }
+
+            float bestROIMatch = 0;
+            bestROIMatch = (float)inliers.Size / (float)matches.Size;
+
+            return new Result(ValueBanknote, new VectorOfPoint(), ColorContour, bestROIMatch, _trainsImage[_LODIndex], _keypointsImageTrain[_LODIndex], keypointsEvalImage, ref matches, ref inliers, ref inliersMaskOut, ref homography);
         }
     }
 }
